@@ -18,10 +18,11 @@ public class HellobootApplication {
 	public static void main(String[] args) {
 		GenericApplicationContext context = new GenericApplicationContext();
 		context.registerBean(HelloController.class);
+		context.registerBean(SimpleHelloService.class);
 		context.refresh();
 
 		TomcatServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
-		WebServer webServer = serverFactory.getWebServer(servletContext -> {
+		WebServer webServer = serverFactory.getWebServer(servletContext ->
 			servletContext.addServlet("frontController", new HttpServlet() {
 				@Override
 				protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -39,8 +40,7 @@ public class HellobootApplication {
 						resp.setStatus(HttpStatus.NOT_FOUND.value());
 					}
 				}
-			}).addMapping("/*");
-		});
+			}).addMapping("/*"));
 		webServer.start();
 	}
 }
